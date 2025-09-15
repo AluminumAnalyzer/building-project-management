@@ -1,0 +1,7 @@
+- 이 프로젝트는 NextJS 15, TypeScript 5, Prisma 최신 버전 기반으로 프로젝트 구조 및 타입 일괄 정비
+- 인증 시스템은 반드시 NextAuth + JWT (커스텀 로그인/회원가입 API)를 사용해야 합니다.
+- Docker 배포를 염두해 둬서 docker-compose.yml을 작성해야함
+- 앱라우딩 API 상세는 https://nextjs.org/docs/app/api-reference 를 15버전을 참조해서 만들어야함 14버전과 차이점 발생으로 오류 발생 가능성이 높음
+- 파일서버 및 이미지 서버를 구축해서 파일 및 이미지 관리 를 해야함
+- 서버 데이터 패칭은 axios를 사용하며, 스테이트 관리는 TanStack Query를 사용해서 스테이트 관리를 해야함
+- 타입스크립트에서 타입은 반드시 정의해야함 any 사용은 최소화해야함

@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # SQLite 데이터베이스 설정 - 기본값
+      - DATABASE_URL=file:./prisma/dev.db
+      # PostgreSQL 사용 시 아래 환경변수 주석 해제 및 위 SQLite 환경변수 주석 처리
+      # - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/construction_db
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+
+      - NEXT_TELEMETRY_DISABLED=1
+    volumes:
+      # SQLite DB를 위한 prisma 디렉토리 볼륨 마운트
+      - prisma:/app/prisma
+      # 업로드된 파일을 위한 볼륨
+      - uploads:/app/public/uploads
+    depends_on:
+      # SQLite 사용 시 PostgreSQL 의존성 제거
+      # - postgres
+      - minio
+    restart: always
+    networks:
+      - app-network
+
+  # PostgreSQL 서비스 - 현재 SQLite 사용중이므로 기본적으로 주석 처리
+  # 프로덕션 환경에서 사용할 경우 주석 해제
+  # postgres:
+  #   image: postgres:15-alpine
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_DB=construction_db
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   networks:
+  #     - app-network
+  #   restart: always
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U postgres"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  # PostgreSQL 사용 시 주석 해제
+  # postgres-data:
+  minio-data:
+  node_modules:
+  # SQLite DB를 위한 prisma 디렉토리 볼륨 유지
+  prisma:

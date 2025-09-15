@@ -1,36 +1,141 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 건설 시공 관리 시스템
 
-## Getting Started
+- Next.js 15, TypeScript 5, Prisma 최신 버전 기반으로 프로젝트 구조 및 타입 일괄 정비
 
-First, run the development server:
+## 상세 기술 사양
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **프레임워크**: Next.js 15 (App Router 기반)
+- **언어**: TypeScript 5.x
+- **스타일**: Tailwind CSS,동적스타일 적용으로 모바일, 타블렛, 데스크탑 대응
+- **UI컴포넌트** : Shadcn/ui 사용
+- **상태 관리**: React Context, useState, useEffect,React Hook Form,
+- **ORM**: Prisma (스키마 기반, SQLite 사용 추후 postgresql 이전후 사용고려해야함)
+- **인증**: NextAuth + JWT (커스텀 로그인/회원가입 API)
+- **API 구조**: RESTful, Next.js API Routes 활용
+- **테스트/정적 분석**: ESLint, Trunk(코드 품질 자동화)
+- **배포**: Cloudflare Pages, Vercel 등 지원
+- **이미지 관리**: 이미지 업로드 및 관리 기능 제공
+- **파일 관리**: 파일 업로드 및 관리 기능 제공
+- **파일 조회**: 파일 조회 기능 제공
+- **파일 다운로드**: 파일 다운로드 기능 제공
+- **파일 삭제**: 파일 삭제 기능 제공
+- **파일 수정**: 파일 수정 기능 제공
+- **파일 추가**: 파일 추가 기능 제공
+- **기타**: Lucide React Icons, 커스텀 UI 컴포넌트, 파일 업로드 지원
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **권한 관리**: UserRole, TeamRole, ProjectRole 등 Enum 기반 역할/권한 분리
+- **주요 모델**: User, Team, TeamMember, Project, ProjectTeam, ProjectMember, Task, MaterialBase,Material, BOM, ProjectBOM, Notification
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 기술 스택
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: SQLite (Prisma ORM)
+- **Authentication**: JWT (JSON Web Tokens)
+- **UI Components**: Lucide React Icons, Shadcn/UI
 
-## Learn More
+건설 프로젝트의 자재 준비부터 시공 완료까지 모든 과정을 체계적으로 관리하는 웹 애플리케이션입니다.
 
-To learn more about Next.js, take a look at the following resources:
+##주요 흐름
+메인 프로젝트 관리
+프로젝트 생성 : 시공사, 건설사, 시공현장명, 시작일,입주사전점검일,종결일 입력
+도면접수 관리 : 프로젝트단위 도면 관리, 파일 및 파일 이미지 관리
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+영업 관리
+프로젝트 조율 : 프로젝트 시공 공정에 관한 미팅, 조율 내역 작성 및 추가 요청 사항 등의 내역 관리
+스펙확인서 관리 : 프로젝트 기본 제품별 사양, 유리사양, 타입, 위치, 프레임 색상을 여러 항목이 입력됨
+물량산출서 관리 : 스펙확인서를 통한 남품 제품의 설계사이즈, 타입, 프레임색상, 유리 사양을 통해 BOM을 통해 조회 하여 자재 상세 내역을 산출 할수 있게 함
+실측데이터 관리 : 시공팀에서 만든 동,호수,타입,위치, 실측 사이즈(여러개가 될수 있음, 기본적으로 너비, 높이, 방향, 개구부너비등 여러개가 될수 있음)
+작업지시서 생성 : 실측데이터를 토대로 제품 타입별 사이즈 계산식을 통해 각 동,호수, 위치에, 제품 사이즈, 유리 사이즈를 산출 할수 있게 함
+출하일 설정 : 프로젝트별로 출고 예정인 제품을 출하일을 설정하여 출하팀으로 지속적으로(분할출고에 대비) 관리할 수 있게 함,시작일, 종결일 필수
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+구매
+유리 발주 관리 : 작업지시서 생성의 부가적으로 유리 발주 내역을 산출후 중요점 (유리 발주순서와 자업지시서 생성 순서 일치)
+자재 발주 관리 : 물량 산출서를 토대로 소요 자재를 산출후 자재코드, 자재명,요청사이즈, 업체명, 접수일, 발주일, 완료일, 입고일 체크 하며 자재를 후처리 공정 관리 까지 동일한 방식으로 발주일,완료일, 입고일 체크 할수 있게함
 
-## Deploy on Vercel
+생산
+공정 관리 : 프로젝트별 공정생성 관리를 함 팀장이 생성후 팀원이 공정합류 또는 팀장이 인원을 배정시키는 방식으로 진행됨
+생산관리 : 프로젝트명을 토대로 소요된 자재를 팀단위로 공정별 생산을 관리 할수 있게함 생산팀에 인원은 동적으로 증가 및 감소 할수 있으며 각 생산 인원이 팀에 특정 공정에 합류하면 공정에 그 인원이 작업을 체크하여 그 인원은 해당 공정에 합류 시간 종료 시간 체크후 해당 공정에 각 인원이 작업한 시간을 체크 할수 있게 할수 있게함. 이를 토대로 해당 공정에 총공수(Man Hour) 및 생산 수량을 관리 할수 있게 함
+불량보고 : 프로젝트로 작업중에 불량이 발생할 경우 불량 내역을 기재 할수 있게 함 불량 내역은 생산중에 작업자가 불량 종류, 불량 사유, 불량수량, 불량 사진, 불량 처리 방법, 불량 처리 일자 등을 기재 할수 있게 함
+생산적제 관리 : 생산 제품 및 반제품을 파렛트 단위로 관리 할수 있게함 이를 토대로 추후 출하 관리 할수 있게 함 내역관리 문틀의 경우 타입별 제품코드, 제품명, 사이즈, 수량이 들어가게 됨 도어의 경우 파렛트별 도어의 동,호수,타입,위치,1번도어,2번도어,3번도어 이런식으로 체크할수 있게 체크시트 발행 및 추후 사진 촬영으로 OCR 스캔후 제품 식별후 체크 할수 있는 방향으로 수정하여 제품 생산후 생산품 관리 리스트(생산품창고)로 관리
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+품질
+자재 입고 확인 : 자재 입고 후 품질 검사 후 입고 확인 체크 할수 있게 함 총수량은 입고 내역으로 산출, 검사 수량을 품질 목표 ppm을 토대로 산출후 품질 검사 결과를 기재후 산출 할수 있게 할것
+불량보고 체크 : 불량보고 내역을 토대로 생산자가 보고한 불량 내역을 검토 및 조치 방안을 토대로 보고서의 자료를 생성 할수 있게 함
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+자재관리
+
+#자재 기본정보
+자재코드 : 문자열
+자재명 : 문자열
+단중 : 숫자(소수점 3자리)
+후처리 : 문자열(도장, 피막, 아노다이징, 니켈 등 여러가지, 중복 선택 가능, 텍스트 선택) 기존 입력 데이터 존재시 ComboBox로 조회수 선택, 기본값으로 무피라는 설정값이 존재
+가공사용여부 : Bool(YES,NO 체크박스 처리)
+기본단위 문자열(EA, ROLL, BOX 등등 ComboBox 처리)
+형상도 : 이미지 (참조 , 여러개의 이미지 입력 가능, 다만 대표 이미지 설정후 다른 테이블에서는 기본 참조를 대표이미지로 참조)
+패키징단위 : 숫자
+포장방법 : 문자열
+
+#색상정보
+후처리종류 : (문자열입력), 기존 입력 데이터 존재시 ComboBox로 조회수 선택
+색상코드 : 문자열
+색상이름: 문자열
+색상 이미지 : 이미지참조 (1개, 필수 아님)
+
+개발
+BOM 관리 : 3가지를 관리함
+
+- 완제품 : 도면 혹은 형상도 가공 기술 사항을 기재 해야함, 이를 토대로 스펙확인서에서는 완제품코드와, 완제품 명을 가져와서 기재할수 있게함
+- 반완제품 : 완제품의 부품이 되거나 반완제품으로 관리함 자재의 수량 및 사이즈 산출 수식을 기재할수 있게함
+
+출하관리
+출하준비 체크 : 생산품 창고로 입고된 생산에서 생산완료된 파렛트 및 기타 부자재 출고 확인 내용을 확인하여 영업에서 작성한 출하일 설정 출하시 실물 사진 촬영관리 (여러장 촬영가능) 및 출고 내역 시트를 출력해서 인수자 확인 한것을 다시 전달 받아서 보관처리
+
+후관리
+접수내역 관리 : 접수일, 프로젝트명, 연락처, AS요청일등을 접수 받아서 시공팀과 일정 조율후 시공일정을 다시 설정 이를 설정하기 위해서 자재준비를 위해 예전 해당프로젝트의 스펙확인 및 작업지시서 등으로 재재작(rework) 혹은 일부 자재만 출고 할지, 도장도료, 유리 등 복합적으로 재출고 하는 것을 준비
+자재준비 관리: 접수내역을 토대로 소요 자재의 경우 색상, 사이즈 가공 방법 등을 설정,
+시공 관리:
+
+##상세 기술 사항
+
+상세 관리 내역
+
+BOM정보
+#BOM 기본정보
+제품명 : 제품명, 제품코드, 생성일, 제품 정보 및 도면 및 이미지 첨부 관리 필요, 제품
+
+도장요청 관리 페이지 #압출요청 내역 페이지
+
+## 주요 기능
+
+### 1. 완료 일정 관리
+
+- **프로젝트 관리** : 프로젝트 현장 관리 및 총괄 대시보드로 각 공정별 총괄 진행 관리
+- **자재 준비 일정**: 필요한 자재 파악 및 주문 관리
+- **물건 제작 일정**: 주문된 자재로 제품 제작 과정 관리
+- **납품 일정**: 완성된 제품의 현장 배송 관리
+- **시공 일정**: 현장에서의 실제 시공 작업 관리
+- **후관리 일정**: 완공 후 유지보수 및 점검 일정 관리
+
+### 2. 팀별 협업 기능
+
+- 팀별 업무 분할 및 관리
+- 실시간 협업 도구
+- 팀 멤버 간 소통 및 댓글 기능
+- 작업 진행 상황 공유
+
+### 3. 사용자 관리
+
+- 사용자 인증 (로그인/회원가입)
+- 역할 기반 권한 관리 (관리자, 매니저, 직원)
+- 팀별 사용자 할당
+
+### 4. 자재 관리
+
+- 거래처 관리 (거래처코드, 거래처명, 거래처주소, 거래처연락처(담당자이름,전화번호), 거래처이메일, 거래처종류, 사업자사본(파일관리),팩스번호(필수아님))
+- 자재 기본정보 (자재코드, 자재명, 자재종류,후처리, 가공사용여부, 기본단위, 규격,형상도, 패키징단위, 포장방법, 가변사이즈여부(bool), 거래처(복수),주문코드, 비고, 도면관리(복수 번관리), 변경 이력 관리(각 부서별 검토 반영), 매입단가, 매출단가)
+- 창고 관리 (창고명, 창고코드, 창고위치, 창고용도, 위치도 이미지(사진 및 배치도 복수))
+- 자재 색상정보 (색상코드,색상이름,색상이미지)
+- 자재 입고 (입고일, 입고수량, 입고자, 입고내역, 자재코드,자재사이즈, 프로젝트명,프로젝트코드,입고단가)
+- 자재 출고 (출고일, 자재코드, 자재사이즈, 출고수량,출고자,출고내역( 생산분출, 출하분출, 재고정리, 재고조정(불량포함)), 프로젝트코드,프로젝트명,출고단가)
+- 자재 조회 (자재명, 자재코드, 후처리, 가공사용여부, 규격, 기본단위, 형상도, 패키징단위, 포장방법, 입고일, 입고수량, 입고자, 입고내역, 출고일, 출고수량, 출고자, 출고내역, 프로젝트명, 프로젝트코드,입고단가,출고단가)
